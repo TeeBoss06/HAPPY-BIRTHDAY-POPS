@@ -1,21 +1,17 @@
-// 🎂 Tap-to-start functionality
-window.addEventListener("click", () => {
+// 🎂 Universal Tap/Click-to-start
+function startBirthdayPage() {
   const bgMusic = document.getElementById("bg-music");
   const tapText = document.getElementById("tapText");
   const pageContent = document.querySelector(".page-content");
 
   if (!bgMusic) return;
 
-  bgMusic.volume = 0;
-
-  // Fade out the "Tap to start" text
+  // Fade out the tapText
   if (tapText) {
     tapText.style.transition = "opacity 1s ease";
     tapText.style.opacity = "0";
     setTimeout(() => {
       tapText.style.display = "none";
-
-      // Remove blur from page content
       if (pageContent) pageContent.classList.add("active");
     }, 1000);
   }
@@ -23,27 +19,30 @@ window.addEventListener("click", () => {
   // Play background music with fade-in
   bgMusic.play().then(() => {
     let currentVolume = 0;
-    const fadeInterval = setInterval(() => {
+    const fadeIn = setInterval(() => {
       if (currentVolume < 1) {
         currentVolume += 0.02;
         bgMusic.volume = currentVolume;
       } else {
-        clearInterval(fadeInterval);
+        clearInterval(fadeIn);
       }
     }, 200);
 
-    // 🎉 Trigger confetti after 1 second
+    // Confetti after 1 second
     setTimeout(() => {
       launchConfetti();
     }, 1000);
-  }).catch((err) => {
-    console.log("Error playing music:", err);
-  });
-}, { once: true }); // only run once
+  }).catch((err) => console.log("Error playing music:", err));
+}
 
-// 🎊 Confetti launcher function
+// Attach the listener to both window and document for maximum compatibility
+["click", "touchstart"].forEach(evt => {
+  window.addEventListener(evt, startBirthdayPage, { once: true });
+});
+
+// 🎊 Confetti launcher
 function launchConfetti() {
-  const duration = 5 * 1000; // 5 seconds
+  const duration = 5 * 1000;
   const end = Date.now() + duration;
 
   (function frame() {
@@ -59,20 +58,17 @@ function launchConfetti() {
       spread: 55,
       origin: { x: 1 },
     });
-
-    if (Date.now() < end) {
-      requestAnimationFrame(frame);
-    }
+    if (Date.now() < end) requestAnimationFrame(frame);
   })();
 }
 
-// 🔇 Auto-pause / fade background music when user leaves the page
+// 🔇 Auto-pause/fade music when leaving tab/app
 document.addEventListener("visibilitychange", function() {
   const music = document.getElementById("bg-music");
   if (!music) return;
 
   if (document.hidden) {
-    // Fade out smoothly
+    // Fade out
     let vol = music.volume;
     const fadeOut = setInterval(() => {
       if (vol > 0.02) {
@@ -84,7 +80,7 @@ document.addEventListener("visibilitychange", function() {
       }
     }, 50);
   } else {
-    // Resume playing and fade in
+    // Resume & fade in
     music.play().then(() => {
       let vol = music.volume;
       const fadeIn = setInterval(() => {
@@ -95,8 +91,6 @@ document.addEventListener("visibilitychange", function() {
           clearInterval(fadeIn);
         }
       }, 50);
-    }).catch((err) => {
-      console.log("Autoplay blocked:", err);
-    });
+    }).catch(err => console.log("Autoplay blocked:", err));
   }
 });
