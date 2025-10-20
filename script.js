@@ -1,9 +1,10 @@
-// Wait until the user clicks anywhere to start the music and confetti
-window.addEventListener("click", () => {
-  const bgMusic = document.getElementById("bgMusic");
+// 🎂 Tap-to-start functionality (Universal)
+function startBirthdayPage() {
+  const bgMusic = document.getElementById("bg-music");
   const tapText = document.getElementById("tapText");
   const pageContent = document.querySelector(".page-content");
-  bgMusic.volume = 0;
+
+  if (!bgMusic) return;
 
   // Fade out the "Tap to start" text
   if (tapText) {
@@ -12,38 +13,30 @@ window.addEventListener("click", () => {
     setTimeout(() => {
       tapText.style.display = "none";
 
-      // Reveal the page by removing blur
-      if (pageContent) {
-        pageContent.classList.add("active");
-      }
+      // Remove blur from page content
+      if (pageContent) pageContent.classList.add("active");
     }, 1000);
   }
 
-  // Play background music with fade-in
-  bgMusic.play().then(() => {
-    let currentVolume = 0;
-    const fadeInterval = setInterval(() => {
-      if (currentVolume < 1) {
-        currentVolume += 0.02;
-        bgMusic.volume = currentVolume;
-      } else {
-        clearInterval(fadeInterval);
-      }
-    }, 200);
-
-    // 🎉 Trigger confetti after 1 second
-    setTimeout(() => {
-      launchConfetti();
-    }, 1000);
-  }).catch((err) => {
-    console.log("Error playing music:", err);
+  // Play background music safely
+  bgMusic.play().catch(() => {
+    console.log("Music blocked by Safari, waiting for user interaction");
   });
-}, { once: true }); // ensures it only runs once no matter how many clicks
 
+  // Trigger confetti after 1 second
+  setTimeout(() => {
+    launchConfetti();
+  }, 1000);
+}
 
-// 🎊 Confetti launcher function
+// Listen for both click and touchstart events on the body
+["click", "touchstart"].forEach(evt => {
+  document.body.addEventListener(evt, startBirthdayPage, { once: true });
+});
+
+// 🎊 Confetti function
 function launchConfetti() {
-  const duration = 5 * 1000; // confetti duration (in ms)
+  const duration = 5 * 1000; // 5 seconds
   const end = Date.now() + duration;
 
   (function frame() {
