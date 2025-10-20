@@ -1,8 +1,11 @@
-// Wait until the user clicks anywhere to start the music and confetti
+// 🎂 Tap-to-start functionality
 window.addEventListener("click", () => {
-  const bgMusic = document.getElementById("bgMusic");
+  const bgMusic = document.getElementById("bg-music");
   const tapText = document.getElementById("tapText");
   const pageContent = document.querySelector(".page-content");
+
+  if (!bgMusic) return;
+
   bgMusic.volume = 0;
 
   // Fade out the "Tap to start" text
@@ -12,10 +15,8 @@ window.addEventListener("click", () => {
     setTimeout(() => {
       tapText.style.display = "none";
 
-      // Reveal the page by removing blur
-      if (pageContent) {
-        pageContent.classList.add("active");
-      }
+      // Remove blur from page content
+      if (pageContent) pageContent.classList.add("active");
     }, 1000);
   }
 
@@ -38,12 +39,11 @@ window.addEventListener("click", () => {
   }).catch((err) => {
     console.log("Error playing music:", err);
   });
-}, { once: true }); // ensures it only runs once no matter how many clicks
-
+}, { once: true }); // only run once
 
 // 🎊 Confetti launcher function
 function launchConfetti() {
-  const duration = 5 * 1000; // confetti duration (in ms)
+  const duration = 5 * 1000; // 5 seconds
   const end = Date.now() + duration;
 
   (function frame() {
@@ -65,3 +65,38 @@ function launchConfetti() {
     }
   })();
 }
+
+// 🔇 Auto-pause / fade background music when user leaves the page
+document.addEventListener("visibilitychange", function() {
+  const music = document.getElementById("bg-music");
+  if (!music) return;
+
+  if (document.hidden) {
+    // Fade out smoothly
+    let vol = music.volume;
+    const fadeOut = setInterval(() => {
+      if (vol > 0.02) {
+        vol -= 0.02;
+        music.volume = vol;
+      } else {
+        music.pause();
+        clearInterval(fadeOut);
+      }
+    }, 50);
+  } else {
+    // Resume playing and fade in
+    music.play().then(() => {
+      let vol = music.volume;
+      const fadeIn = setInterval(() => {
+        if (vol < 1) {
+          vol += 0.02;
+          music.volume = vol;
+        } else {
+          clearInterval(fadeIn);
+        }
+      }, 50);
+    }).catch((err) => {
+      console.log("Autoplay blocked:", err);
+    });
+  }
+});
