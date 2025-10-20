@@ -135,6 +135,27 @@ h1 {
   100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
 }
 
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.gallery img {
+  width: 250px; /* adjust size as needed */
+  height: auto;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  transition: transform 0.3s ease;
+}
+
+.gallery img:hover {
+  transform: scale(1.05);
+}
+
+
 /* Initially blur the entire content */
 .page-content {
   filter: blur(10px) brightness(0.5);
