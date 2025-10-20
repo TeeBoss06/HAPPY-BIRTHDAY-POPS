@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday Dad!</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <p id="tapText">🎂 Tap anywhere to start the surprise!</p>
+
+   <!-- 🎁 Main content -->
+  <div class="page-content">
+    
+  <div class="container">
+    <h1>🎉 Happy Birthday, Dad! 🎂</h1>
+    <p class="subtitle">Wishing you joy, laughter, and blessings today and always 💖</p>
+   
+    <div class="gallery">
+      <!-- 🖼️ Your dad’s pictures will go here -->
+      <!-- Example: <img src="dad1.jpg" alt="Dad Photo"> -->
+    </div>
+
+    <div class="letter">
+        <p>
+            Dear Dad,
+
+<br>Happy Birthdayyyy🎉🥳. May your new age be filled with new blessings and every good things of life. You'll live long in good health and wealth to enjoy the fruit of your labour.
+
+Thank you for being an amazing father over the years. Thank you for the love, care, corrections and for everything you've done for the betterment of the lives of we your children. May the Lord reward you abundantly. Thank you for showing us the way of the Lord. At the end of time you'll not be found wanting by God's grace.
+
+May your day be as wonderful as you are. Enjoy your day. It won't be your last by God's grace. You'll celebrate many more. 
+<br>Once again, 
+<br><em>Happy birthday Pops, have a great one.</em>
+<br>
+<em>With love,
+    <br>Temiloluwa ❤️
+</em>
+        </p>
+      <!-- 💌 Your birthday letter goes here -->
+      <!-- Example:
+      <p>Dear Dad,<br><br>
+      You are my greatest inspiration and my biggest blessing...
+      </p>
+      -->
+    </div>
+  </div>
+
+  <!-- 🎈 Floating balloons -->
+  <div class="balloons">
+    <div class="balloon" style="background-color: #ff4b5c;"></div>
+    <div class="balloon" style="background-color: #ffcd3c;"></div>
+    <div class="balloon" style="background-color: #4ecdc4;"></div>
+    <div class="balloon" style="background-color: #5c7aff;"></div>
+    <div class="balloon" style="background-color: #a8072d;"></div>
+  </div>
+
+  <!-- 🎶 Sound Effect -->
+ <!-- Background Music -->
+<audio id="bgMusic" src="Congratulations__Happy_Birthday_128k.mp3" autoplay loop></audio>
+
+<script>
+  // Try to play automatically when page loads
+  window.addEventListener("load", () => {
+    const bgMusic = document.getElementById("bgMusic");
+    bgMusic.play().catch(() => {
+      console.log("Autoplay blocked — user must click anywhere first");
+    });
+  });
+</script>
+
+
+  <!-- Confetti library (small and fast) -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+ <script src="script.js?v=1.0"></script>
+
+</body>
+</html>
