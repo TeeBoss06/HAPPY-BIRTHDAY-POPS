@@ -1,10 +1,9 @@
-// 🎂 Tap-to-start functionality
+// Wait until the user clicks anywhere to start the music and confetti
 window.addEventListener("click", () => {
-  const bgMusic = document.getElementById("bg-music");
+  const bgMusic = document.getElementById("bgMusic");
   const tapText = document.getElementById("tapText");
   const pageContent = document.querySelector(".page-content");
-
-  if (!bgMusic) return;
+  bgMusic.volume = 0;
 
   // Fade out the "Tap to start" text
   if (tapText) {
@@ -13,25 +12,38 @@ window.addEventListener("click", () => {
     setTimeout(() => {
       tapText.style.display = "none";
 
-      // Remove blur from page content
-      if (pageContent) pageContent.classList.add("active");
+      // Reveal the page by removing blur
+      if (pageContent) {
+        pageContent.classList.add("active");
+      }
     }, 1000);
   }
 
-  // Play background music
-  bgMusic.play().catch((err) => {
+  // Play background music with fade-in
+  bgMusic.play().then(() => {
+    let currentVolume = 0;
+    const fadeInterval = setInterval(() => {
+      if (currentVolume < 1) {
+        currentVolume += 0.02;
+        bgMusic.volume = currentVolume;
+      } else {
+        clearInterval(fadeInterval);
+      }
+    }, 200);
+
+    // 🎉 Trigger confetti after 1 second
+    setTimeout(() => {
+      launchConfetti();
+    }, 1000);
+  }).catch((err) => {
     console.log("Error playing music:", err);
   });
+}, { once: true }); // ensures it only runs once no matter how many clicks
 
-  // Trigger confetti after 1 second
-  setTimeout(() => {
-    launchConfetti();
-  }, 1000);
-}, { once: true }); // only run once
 
 // 🎊 Confetti launcher function
 function launchConfetti() {
-  const duration = 5 * 1000; // 5 seconds
+  const duration = 5 * 1000; // confetti duration (in ms)
   const end = Date.now() + duration;
 
   (function frame() {
